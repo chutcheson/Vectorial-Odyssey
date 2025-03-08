@@ -60,11 +60,14 @@ body::before {
 }
 
 .container {
-    max-width: 1600px; /* Increased from 1400px to use more screen space */
-    width: 90%; /* Use 90% of screen width */
+    max-width: 1800px; /* Increased to use even more screen space */
+    width: 95%; /* Increased from 90% to 95% */
     margin: 0 auto;
     padding: var(--spacing-md);
     position: relative;
+    min-height: 95vh; /* Use 95% of viewport height */
+    display: flex;
+    flex-direction: column;
 }
 
 .start-title {
@@ -132,8 +135,11 @@ body::before {
     border: 2px solid var(--text-color);
     box-shadow: var(--shadow);
     position: relative;
+    width: 100%;
     max-width: 100%;
     margin: 0 auto;
+    flex: 1; /* Take up available space */
+    min-height: 85vh; /* Use at least 85% of viewport height */
 }
 
 /* Wabi-Sabi imperfection - asymmetric design element */
@@ -344,13 +350,13 @@ label {
 }
 
 .current-word {
-    font-size: 2.5rem;
+    font-size: 3rem; /* Increased font size */
     font-weight: bold;
     color: var(--primary-color);
     padding: var(--spacing-lg);
     border: 3px solid var(--text-color);
-    min-width: 250px;
-    min-height: 120px;
+    min-width: 300px; /* Increased width */
+    min-height: 150px; /* Increased height */
     text-align: center;
     background-color: #f7f4ed; /* Slightly different color for canvas */
     box-shadow: 6px 6px 0 var(--text-color);
@@ -415,11 +421,11 @@ label {
 }
 
 .word-choice {
-    font-size: 1.5rem;
+    font-size: 1.7rem; /* Increased font size */
     font-weight: bold;
-    padding: 15px 20px;
+    padding: 18px 25px; /* Increased padding */
     border: 2px solid var(--text-color);
-    min-width: 150px;
+    min-width: 180px; /* Increased width */
     text-align: center;
     background-color: var(--card-background);
     cursor: pointer;
@@ -532,9 +538,9 @@ label {
 .right-panel {
     background-color: var(--card-background);
     border: 2px solid var(--text-color);
-    padding: 20px;
+    padding: 25px;
     width: 100%;
-    max-width: 450px; /* Match grid-template-columns */
+    max-width: 500px; /* Match increased grid-template-columns */
     height: 100%; /* Take full height of grid cell */
     display: flex;
     flex-direction: column;
@@ -569,7 +575,7 @@ label {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    height: 450px; /* Fixed height instead of max-height */
+    height: 550px; /* Increased height */
     overflow-y: auto;
     border-bottom: 1px solid var(--text-color);
     margin-bottom: 15px;
@@ -694,10 +700,10 @@ label {
 @media (min-width: 768px) {
     #gameplay-screen {
         display: grid;
-        grid-template-columns: 1fr 450px; /* Increased size of the right panel */
+        grid-template-columns: 1fr 500px; /* Further increased size of right panel */
         grid-template-rows: auto 1fr auto;
         gap: var(--spacing-lg);
-        min-height: 700px; /* Set minimum height for gameplay screen */
+        min-height: 800px; /* Increased minimum height for gameplay screen */
     }
     
     .game-header {
