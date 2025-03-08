@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWord: document.getElementById('current-word'),
         wordChoices: document.getElementById('word-choices'),
         wordHistory: document.getElementById('word-history'),
+        llmReasoning: document.getElementById('llm-reasoning'),
+        toggleReasoning: document.getElementById('toggle-reasoning'),
         
         // Button elements
         startGameBtn: document.getElementById('start-game'),
@@ -59,6 +61,19 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.nextRoundBtn.addEventListener('click', startNextRound);
     elements.endGameBtn.addEventListener('click', endGame);
     elements.playAgainBtn.addEventListener('click', resetGame);
+    elements.toggleReasoning.addEventListener('click', toggleReasoningPanel);
+    
+    // Function to toggle reasoning panel
+    function toggleReasoningPanel() {
+        elements.llmReasoning.classList.toggle('hidden');
+        elements.toggleReasoning.classList.toggle('active');
+        
+        if (elements.toggleReasoning.classList.contains('active')) {
+            elements.toggleReasoning.textContent = 'Hide LLM Reasoning';
+        } else {
+            elements.toggleReasoning.textContent = 'Show LLM Reasoning';
+        }
+    }
     
     // Timer functions
     function startTimer() {
@@ -155,6 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update round display
         elements.currentRound.textContent = `${gameState.currentRound} / ${gameState.totalRounds}`;
         elements.currentModel.textContent = getModelDisplayName(gameState.currentModel);
+        
+        // Clear reasoning panel
+        elements.llmReasoning.innerHTML = '';
         
         // Get random start and target words
         try {
@@ -284,6 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!gameState.gameActive) return;
         
         try {
+            // Clear previous reasoning
+            elements.llmReasoning.innerHTML = '<p>Thinking...</p>';
+            
             const response = await fetch(`${API.BASE_URL}${API.LLM_CHOOSE}`, {
                 method: 'POST',
                 headers: {
@@ -306,6 +327,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const { chosenWord } = data;
             
+            // Generate mock reasoning (in a real implementation, this would come from the LLM)
+            const reasoning = generateMockReasoning(choices, chosenWord, gameState.targetWord);
+            elements.llmReasoning.innerHTML = reasoning;
+            
             // Highlight the chosen word
             highlightChoice(chosenWord);
             
@@ -321,6 +346,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => processChoice(firstWord), 1000);
             }
         }
+    }
+    
+    // Function to generate mock reasoning for demo purposes
+    function generateMockReasoning(choices, chosenWord, targetWord) {
+        // Find the chosen word in choices array
+        const chosenChoice = choices.find(c => c.word === chosenWord);
+        
+        // For demo purposes, we'll create a mock reasoning
+        let reasoning = `<h4>LLM Decision Process:</h4>
+        <p>Analyzing options to reach target word "${targetWord}":</p>
+        <ul>`;
+        
+        // Add analysis for each choice
+        choices.forEach(choice => {
+            const similarity = choice.similarity.toFixed(4);
+            const isChosen = choice.word === chosenWord;
+            
+            reasoning += `<li>${choice.word} - Similarity: ${similarity}`;
+            
+            if (isChosen) {
+                reasoning += ` <strong>(Selected)</strong>`;
+            }
+            
+            reasoning += `</li>`;
+        });
+        
+        reasoning += `</ul>
+        <p>I chose <strong>${chosenWord}</strong> because it appears to have the strongest semantic connection to the target word "${targetWord}".</p>`;
+        
+        return reasoning;
     }
     
     function highlightChoice(word) {

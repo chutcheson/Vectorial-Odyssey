@@ -60,7 +60,7 @@ body::before {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: var(--spacing-md);
     position: relative;
@@ -783,6 +783,53 @@ label {
     font-size: 18px;
     font-weight: bold;
     color: var(--accent-color);
+}
+
+/* LLM Reasoning Styles */
+.llm-reasoning-container {
+    width: 100%;
+    margin-top: var(--spacing-lg);
+    border: 2px solid var(--text-color);
+    background-color: var(--card-background);
+    box-shadow: 4px 4px 0 var(--text-color);
+}
+
+.toggle-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+    border: none;
+    border-bottom: 2px solid var(--text-color);
+    text-align: left;
+    font-family: 'Space Mono', monospace;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-btn::after {
+    content: '+';
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.toggle-btn.active::after {
+    content: '-';
+}
+
+.llm-reasoning {
+    padding: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    max-height: 300px;
+    overflow-y: auto;
+    border-top: 1px solid var(--text-color);
 }
 
 /* End of styles */
