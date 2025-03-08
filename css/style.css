@@ -60,7 +60,8 @@ body::before {
 }
 
 .container {
-    max-width: 1400px;
+    max-width: 1600px; /* Increased from 1400px to use more screen space */
+    width: 90%; /* Use 90% of screen width */
     margin: 0 auto;
     padding: var(--spacing-md);
     position: relative;
@@ -483,8 +484,10 @@ label {
     border: 2px solid var(--text-color);
     padding: 20px;
     width: 100%;
-    max-width: 400px; /* Increased from 300px to provide more horizontal space */
-    align-self: flex-start;
+    max-width: 450px; /* Match grid-template-columns */
+    height: 100%; /* Take full height of grid cell */
+    display: flex;
+    flex-direction: column;
     box-shadow: 6px 6px 0 var(--text-color);
     position: relative;
 }
@@ -516,8 +519,10 @@ label {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    max-height: 450px; /* Increased from 300px to provide more room */
+    height: 450px; /* Fixed height instead of max-height */
     overflow-y: auto;
+    border-bottom: 1px solid var(--text-color);
+    margin-bottom: 15px;
 }
 
 .history-item {
@@ -639,9 +644,10 @@ label {
 @media (min-width: 768px) {
     #gameplay-screen {
         display: grid;
-        grid-template-columns: 1fr 400px; /* Updated to match max-width of right-panel */
+        grid-template-columns: 1fr 450px; /* Increased size of the right panel */
         grid-template-rows: auto 1fr auto;
         gap: var(--spacing-lg);
+        min-height: 700px; /* Set minimum height for gameplay screen */
     }
     
     .game-info {

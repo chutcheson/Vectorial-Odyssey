@@ -397,13 +397,34 @@ document.addEventListener('DOMContentLoaded', () => {
             return '<p>No reasoning provided by the model.</p>';
         }
         
-        // Format the reasoning with proper HTML
-        const formatted = reasoning
-            .replace(/\n\n/g, '</p><p>')
-            .replace(/\n/g, '<br>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Convert markdown-style **bold** to <strong>
+        // Debug the incoming reasoning
+        console.log('Raw reasoning to format:', reasoning);
         
-        return `<p>${formatted}</p>`;
+        // More simple formatting approach
+        const paragraphs = reasoning.split('\n\n');
+        let formatted = '';
+        
+        paragraphs.forEach(para => {
+            para = para.trim();
+            if (para) {
+                // Handle markdown-style lists
+                if (para.match(/^[\*\-]/m)) {
+                    // Convert to HTML list
+                    const items = para.split(/\n[\*\-] /);
+                    formatted += '<ul>';
+                    items.forEach(item => {
+                        if (item.trim()) {
+                            formatted += `<li>${item.replace(/^[\*\-] /, '')}</li>`;
+                        }
+                    });
+                    formatted += '</ul>';
+                } else {
+                    formatted += `<p>${para.replace(/\n/g, '<br>')}</p>`;
+                }
+            }
+        });
+        
+        return formatted || '<p>Analysis was formatted but empty.</p>';
     }
     
     function highlightChoice(word) {
@@ -481,6 +502,10 @@ document.addEventListener('DOMContentLoaded', () => {
             reasoningContainer.className = 'reasoning-container hidden';
             reasoningContainer.innerHTML = gameState.currentReasoning;
             historyItem.appendChild(reasoningContainer);
+            
+            // Debugging - log the structure we're creating
+            console.log('Created reasoning container:', reasoningContainer);
+            console.log('With content:', gameState.currentReasoning);
             
             // Add toggle functionality with more robust handling
             reasoningToggle.addEventListener('click', function(event) {
