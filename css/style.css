@@ -483,7 +483,7 @@ label {
     border: 2px solid var(--text-color);
     padding: 20px;
     width: 100%;
-    max-width: 300px;
+    max-width: 400px; /* Increased from 300px to provide more horizontal space */
     align-self: flex-start;
     box-shadow: 6px 6px 0 var(--text-color);
     position: relative;
@@ -516,12 +516,13 @@ label {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    max-height: 300px;
+    max-height: 450px; /* Increased from 300px to provide more room */
     overflow-y: auto;
 }
 
 .history-item {
     padding: 10px 12px;
+    padding-right: 40px; /* Make room for the distance indicator */
     border-bottom: 1px dashed var(--text-color);
     display: flex;
     flex-wrap: wrap;
@@ -638,7 +639,7 @@ label {
 @media (min-width: 768px) {
     #gameplay-screen {
         display: grid;
-        grid-template-columns: 1fr 300px;
+        grid-template-columns: 1fr 400px; /* Updated to match max-width of right-panel */
         grid-template-rows: auto 1fr auto;
         gap: var(--spacing-lg);
     }
@@ -824,15 +825,18 @@ label {
 
 .reasoning-container {
     margin-top: 8px;
-    padding: 10px;
+    padding: 15px;
+    width: 100%;
     background-color: var(--card-background);
     border: 1px solid var(--text-color);
     font-family: 'Space Mono', monospace;
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.5;
     position: relative;
     box-shadow: 2px 2px 0 var(--text-color);
     border-radius: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .reasoning-toggle {

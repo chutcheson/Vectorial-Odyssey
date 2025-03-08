@@ -438,18 +438,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Create indicator circle
                 const indicatorEl = document.createElement('div');
                 indicatorEl.className = `distance-indicator distance-${distance}`;
-                indicatorEl.style.width = '18px'; // Slightly smaller for history items
-                indicatorEl.style.height = '18px';
-                indicatorEl.style.fontSize = '10px';
+                indicatorEl.style.width = '26px'; // Increased size for better visibility
+                indicatorEl.style.height = '26px';
+                indicatorEl.style.fontSize = '12px';
                 indicatorEl.textContent = distance;
                 historyItem.appendChild(indicatorEl);
             } else if (distanceAttr === 'unknown') {
                 // Unknown distance
                 const indicatorEl = document.createElement('div');
                 indicatorEl.className = 'distance-indicator distance-unknown';
-                indicatorEl.style.width = '18px';
-                indicatorEl.style.height = '18px';
-                indicatorEl.style.fontSize = '10px';
+                indicatorEl.style.width = '26px'; // Match the size of numbered indicators
+                indicatorEl.style.height = '26px';
+                indicatorEl.style.fontSize = '12px';
                 indicatorEl.textContent = '?';
                 historyItem.appendChild(indicatorEl);
             }
