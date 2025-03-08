@@ -524,10 +524,17 @@ label {
     padding: 10px 12px;
     border-bottom: 1px dashed var(--text-color);
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     position: relative;
     margin-bottom: 5px;
     font-family: 'Space Mono', monospace;
+}
+
+.history-item.thinking {
+    color: var(--secondary-color);
+    font-style: italic;
+    opacity: 0.8;
 }
 
 /* Vertical connector between history items */
@@ -786,12 +793,9 @@ label {
 }
 
 /* LLM Reasoning Styles */
-.llm-reasoning-container {
+.toggle-container {
+    margin-top: var(--spacing-md);
     width: 100%;
-    margin-top: var(--spacing-lg);
-    border: 2px solid var(--text-color);
-    background-color: var(--card-background);
-    box-shadow: 4px 4px 0 var(--text-color);
 }
 
 .toggle-btn {
@@ -800,36 +804,52 @@ label {
     background-color: var(--secondary-color);
     color: var(--background-color);
     border: none;
-    border-bottom: 2px solid var(--text-color);
-    text-align: left;
+    border: 2px solid var(--text-color);
+    text-align: center;
     font-family: 'Space Mono', monospace;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 0.5px;
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    box-shadow: 2px 2px 0 var(--text-color);
 }
 
-.toggle-btn::after {
-    content: '+';
-    font-size: 20px;
-    font-weight: bold;
+.toggle-btn:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--text-color);
 }
 
-.toggle-btn.active::after {
-    content: '-';
-}
-
-.llm-reasoning {
-    padding: 20px;
+.reasoning-container {
+    margin-top: 8px;
+    padding: 10px;
+    background-color: var(--card-background);
+    border: 1px solid var(--text-color);
     font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    line-height: 1.6;
-    max-height: 300px;
-    overflow-y: auto;
-    border-top: 1px solid var(--text-color);
+    font-size: 12px;
+    line-height: 1.4;
+    position: relative;
+    box-shadow: 2px 2px 0 var(--text-color);
+    border-radius: 0;
+}
+
+.reasoning-toggle {
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 2px 5px;
+    background-color: var(--card-background);
+    border: 1px solid var(--text-color);
+    margin-top: 5px;
+    font-family: 'Space Mono', monospace;
+    box-shadow: 1px 1px 0 var(--text-color);
+}
+
+.reasoning-toggle:hover {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
 }
 
 /* End of styles */

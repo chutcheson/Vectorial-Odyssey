@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWord: document.getElementById('current-word'),
         wordChoices: document.getElementById('word-choices'),
         wordHistory: document.getElementById('word-history'),
-        llmReasoning: document.getElementById('llm-reasoning'),
         toggleReasoning: document.getElementById('toggle-reasoning'),
         
         // Button elements
@@ -65,13 +64,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to toggle reasoning panel
     function toggleReasoningPanel() {
-        elements.llmReasoning.classList.toggle('hidden');
-        elements.toggleReasoning.classList.toggle('active');
+        const reasoningElements = document.querySelectorAll('.reasoning-container');
         
-        if (elements.toggleReasoning.classList.contains('active')) {
-            elements.toggleReasoning.textContent = 'Hide LLM Reasoning';
-        } else {
+        // Toggle display of all reasoning containers
+        reasoningElements.forEach(el => {
+            el.classList.toggle('hidden');
+        });
+        
+        // Update button text
+        if (reasoningElements.length > 0 && reasoningElements[0].classList.contains('hidden')) {
             elements.toggleReasoning.textContent = 'Show LLM Reasoning';
+        } else {
+            elements.toggleReasoning.textContent = 'Hide LLM Reasoning';
         }
     }
     
@@ -302,8 +306,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!gameState.gameActive) return;
         
         try {
-            // Clear previous reasoning
-            elements.llmReasoning.innerHTML = '<p>Thinking...</p>';
+            // Create a thinking indicator in the history panel
+            const thinkingItem = document.createElement('div');
+            thinkingItem.className = 'history-item thinking';
+            thinkingItem.textContent = 'Thinking...';
+            elements.wordHistory.appendChild(thinkingItem);
+            elements.wordHistory.scrollTop = elements.wordHistory.scrollHeight;
             
             const response = await fetch(`${API.BASE_URL}${API.LLM_CHOOSE}`, {
                 method: 'POST',
@@ -330,9 +338,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const { chosenWord } = data;
             
+            // Remove thinking indicator
+            thinkingItem.remove();
+            
             // Generate mock reasoning (in a real implementation, this would come from the LLM)
             const reasoning = generateMockReasoning(choices, chosenWord, gameState.targetWord);
-            elements.llmReasoning.innerHTML = reasoning;
+            
+            // Store the reasoning to be added with the history item later
+            gameState.currentReasoning = reasoning;
             
             // Highlight the chosen word
             highlightChoice(chosenWord);
@@ -357,16 +370,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const chosenChoice = choices.find(c => c.word === chosenWord);
         
         // For demo purposes, we'll create a mock reasoning
-        let reasoning = `<h4>LLM Decision Process:</h4>
-        <p>Analyzing options to reach target word "${targetWord}":</p>
+        let reasoning = `<p>Analyzing options to reach "${targetWord}":</p>
         <ul>`;
         
         // Add analysis for each choice
         choices.forEach(choice => {
-            const similarity = choice.similarity.toFixed(4);
+            // In a real implementation, this would be based on the LLM's actual reasoning
+            const semantic = Math.random() > 0.5 ? 'strong' : 'weak';
             const isChosen = choice.word === chosenWord;
             
-            reasoning += `<li>${choice.word} - Similarity: ${similarity}`;
+            reasoning += `<li>${choice.word} - ${semantic} semantic connection`;
             
             if (isChosen) {
                 reasoning += ` <strong>(Selected)</strong>`;
@@ -376,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         reasoning += `</ul>
-        <p>I chose <strong>${chosenWord}</strong> because it appears to have the strongest semantic connection to the target word "${targetWord}".</p>`;
+        <p>I chose <strong>${chosenWord}</strong> because it appears to have the strongest semantic connection to "${targetWord}".</p>`;
         
         return reasoning;
     }
@@ -441,6 +454,31 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // No distance info available, just show the word
             historyItem.textContent = chosenWord;
+        }
+        
+        // Add reasoning for this choice if available
+        if (gameState.currentReasoning) {
+            // Create a toggle button
+            const reasoningToggle = document.createElement('button');
+            reasoningToggle.className = 'reasoning-toggle';
+            reasoningToggle.textContent = 'Show reasoning';
+            historyItem.appendChild(reasoningToggle);
+            
+            // Create reasoning container (hidden by default)
+            const reasoningContainer = document.createElement('div');
+            reasoningContainer.className = 'reasoning-container hidden';
+            reasoningContainer.innerHTML = gameState.currentReasoning;
+            historyItem.appendChild(reasoningContainer);
+            
+            // Add toggle functionality
+            reasoningToggle.addEventListener('click', function() {
+                reasoningContainer.classList.toggle('hidden');
+                reasoningToggle.textContent = reasoningContainer.classList.contains('hidden') ? 
+                    'Show reasoning' : 'Hide reasoning';
+            });
+            
+            // Clear the current reasoning for the next choice
+            gameState.currentReasoning = null;
         }
         
         elements.wordHistory.appendChild(historyItem);
