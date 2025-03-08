@@ -1,0 +1,6 @@
+materials/*
+!materials/top_1000_nouns.txt
+word_traverse_env/
+__pycache__/
+*.pyc
+.DS_Store
