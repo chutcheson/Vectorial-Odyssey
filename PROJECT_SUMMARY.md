@@ -67,7 +67,7 @@ The game's aesthetic combines two design approaches:
 ### Startup Process
 1. Install dependencies with `npm install`
 2. Start the server with `npm start`
-3. Access the game at http://localhost:3000
+3. Access the game at http://localhost:3001
 
 ## Future Enhancements
 

@@ -46,9 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         roundsSummary: document.getElementById('rounds-summary')
     };
     
-    // API endpoints (assuming server is running on localhost:3000)
+    // API endpoints (assuming server is running on localhost:3001)
     const API = {
-        BASE_URL: 'http://localhost:3000/api',
+        BASE_URL: 'http://localhost:3001/api',
         RANDOM_WORDS: '/words/random',
         WORD_CHOICES: '/words/:word/choices',
         LLM_CHOOSE: '/llm/choose'
