@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         targetWord: '',
         pathTaken: [],
         timerInterval: null,
-        gameActive: false
+        gameActive: false,
+        currentReasoning: null
     };
     
     // DOM Elements
@@ -175,8 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.currentRound.textContent = `${gameState.currentRound} / ${gameState.totalRounds}`;
         elements.currentModel.textContent = getModelDisplayName(gameState.currentModel);
         
-        // Clear reasoning panel
-        elements.llmReasoning.innerHTML = '';
+        // Reset reasoning state
+        gameState.currentReasoning = null;
         
         // Get random start and target words
         try {
