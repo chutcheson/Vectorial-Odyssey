@@ -99,9 +99,12 @@ Path taken so far: ${pathSoFar.join(' → ')}
 You have these choices:
 ${choices.map(c => `- ${c.word}`).join('\n')}
 
-Navigate from your current word to a target word. At each step, you will be given the two most similar words to the current word and the two least similar words to the current word from a corpus of 1000 common nouns.
+Game rules: Navigate from your current word to the target word by selecting the best word at each step. For each choice, you are always given exactly four words:
+- Two words that are semantically closest to your current word
+- Two words that are semantically furthest from your current word
+All words come from a corpus of 1000 common nouns.
 
-Choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
+Your goal is to choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
                     }
                 ]
             },
@@ -144,9 +147,12 @@ Path taken so far: ${pathSoFar.join(' → ')}
 You have these choices:
 ${choices.map(c => `- ${c.word}`).join('\n')}
 
-Navigate from your current word to a target word. At each step, you will be given the two most similar words to the current word and the two least similar words to the current word from a corpus of 1000 common nouns.
+Game rules: Navigate from your current word to the target word by selecting the best word at each step. For each choice, you are always given exactly four words:
+- Two words that are semantically closest to your current word
+- Two words that are semantically furthest from your current word
+All words come from a corpus of 1000 common nouns.
 
-Choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
+Your goal is to choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
                     }
                 ],
                 temperature: 0
