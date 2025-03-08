@@ -106,11 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to update the current word display with distance info
     function updateCurrentWordDisplay() {
-        const distanceDisplay = document.createElement('div');
-        distanceDisplay.className = 'current-word-distance';
-        
         // Clear existing content and recreate
         elements.currentWord.innerHTML = '';
+        
+        // Create container to hold word and position the indicator properly
+        elements.currentWord.style.position = 'relative';
         
         // Create word text
         const wordText = document.createElement('div');
@@ -118,29 +118,33 @@ document.addEventListener('DOMContentLoaded', () => {
         wordText.textContent = gameState.currentWord;
         elements.currentWord.appendChild(wordText);
         
-        // Add distance info if available
+        // Add hidden distance info for reference
+        const distanceDisplay = document.createElement('div');
+        distanceDisplay.className = 'current-word-distance';
+        distanceDisplay.textContent = gameState.currentWordDistanceToTarget;
+        elements.currentWord.appendChild(distanceDisplay);
+        
+        // Add distance indicator circle if available
         if (gameState.currentWordDistanceToTarget !== undefined) {
-            // Create and add distance element
             if (gameState.currentWordDistanceToTarget > 0) {
-                distanceDisplay.textContent = `${gameState.currentWordDistanceToTarget} hop${gameState.currentWordDistanceToTarget !== 1 ? 's' : ''} to target`;
-                
-                // Add color classes based on distance
-                if (gameState.currentWordDistanceToTarget === 1) {
-                    distanceDisplay.classList.add('distance-close');
-                } else if (gameState.currentWordDistanceToTarget === 2) {
-                    distanceDisplay.classList.add('distance-medium');
-                } else {
-                    distanceDisplay.classList.add('distance-far');
-                }
+                // Create indicator circle
+                const indicatorEl = document.createElement('div');
+                indicatorEl.className = `distance-indicator distance-${gameState.currentWordDistanceToTarget}`;
+                indicatorEl.textContent = gameState.currentWordDistanceToTarget;
+                elements.currentWord.appendChild(indicatorEl);
             } else if (gameState.currentWordDistanceToTarget === 0) {
-                distanceDisplay.textContent = `Target reached!`;
-                distanceDisplay.classList.add('distance-target');
+                // Target reached
+                const indicatorEl = document.createElement('div');
+                indicatorEl.className = 'distance-indicator distance-target';
+                indicatorEl.textContent = '✓';
+                elements.currentWord.appendChild(indicatorEl);
             } else {
-                distanceDisplay.textContent = 'Unknown distance';
-                distanceDisplay.classList.add('distance-unknown');
+                // Unknown distance
+                const indicatorEl = document.createElement('div');
+                indicatorEl.className = 'distance-indicator distance-unknown';
+                indicatorEl.textContent = '?';
+                elements.currentWord.appendChild(indicatorEl);
             }
-            
-            elements.currentWord.appendChild(distanceDisplay);
         }
     }
 
@@ -165,17 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.currentWord.textContent = startWord; // Initial display without distance
             elements.targetWord.textContent = targetWord;
             
-            // Initialize first history item
-            const firstHistoryItem = document.createElement('div');
-            firstHistoryItem.className = 'history-item';
-            
-            const wordEl = document.createElement('span');
-            wordEl.className = 'history-word';
-            wordEl.textContent = startWord;
-            
-            firstHistoryItem.appendChild(wordEl);
+            // Initialize first history item - empty at first
             elements.wordHistory.innerHTML = '';
-            elements.wordHistory.appendChild(firstHistoryItem);
+            
+            // Will be populated properly after getWordChoices is called and we have distance info
             
             // Get initial word choices (this will also update the current word display with distance)
             await getWordChoices();
@@ -205,6 +202,32 @@ document.addEventListener('DOMContentLoaded', () => {
             // Display choices
             displayWordChoices(choices);
             
+            // If this is the first word of the path, add it to history with distance info
+            if (gameState.pathTaken.length === 1 && gameState.pathTaken[0] === gameState.currentWord) {
+                // Add the first word to history with its distance
+                const firstHistoryItem = document.createElement('div');
+                firstHistoryItem.className = 'history-item';
+                firstHistoryItem.style.position = 'relative';
+                
+                const wordEl = document.createElement('span');
+                wordEl.className = 'history-word';
+                wordEl.textContent = gameState.currentWord;
+                firstHistoryItem.appendChild(wordEl);
+                
+                // Add distance indicator
+                if (currentWordDistanceToTarget !== undefined && currentWordDistanceToTarget > 0) {
+                    const indicatorEl = document.createElement('div');
+                    indicatorEl.className = `distance-indicator distance-${currentWordDistanceToTarget}`;
+                    indicatorEl.style.width = '18px';
+                    indicatorEl.style.height = '18px';
+                    indicatorEl.style.fontSize = '10px';
+                    indicatorEl.textContent = currentWordDistanceToTarget;
+                    firstHistoryItem.appendChild(indicatorEl);
+                }
+                
+                elements.wordHistory.appendChild(firstHistoryItem);
+            }
+            
             // If LLM, automatically make a choice
             if (gameState.gameActive) {
                 setTimeout(() => makeAIChoice(choices), 1000);
@@ -222,32 +245,36 @@ document.addEventListener('DOMContentLoaded', () => {
             choiceEl.className = 'word-choice';
             choiceEl.setAttribute('data-word', choice.word);
             
-            // Create word and distance elements
+            // Create word element
             const wordEl = document.createElement('span');
             wordEl.className = 'choice-word';
             wordEl.textContent = choice.word;
+            choiceEl.appendChild(wordEl);
             
+            // Create hidden distance element (for reference when adding to history)
             const distanceEl = document.createElement('span');
             distanceEl.className = 'choice-distance';
-            
-            if (choice.distanceToTarget > 0) {
-                distanceEl.textContent = `${choice.distanceToTarget} hop${choice.distanceToTarget !== 1 ? 's' : ''} to target`;
-                
-                // Add color classes based on distance
-                if (choice.distanceToTarget === 1) {
-                    distanceEl.classList.add('distance-close');
-                } else if (choice.distanceToTarget === 2) {
-                    distanceEl.classList.add('distance-medium');
-                } else {
-                    distanceEl.classList.add('distance-far');
-                }
-            } else {
-                distanceEl.textContent = 'Unknown distance';
-                distanceEl.classList.add('distance-unknown');
-            }
-            
-            choiceEl.appendChild(wordEl);
+            distanceEl.textContent = choice.distanceToTarget;
             choiceEl.appendChild(distanceEl);
+            
+            // Create distance indicator circle
+            if (choice.distanceToTarget > 0) {
+                const indicatorEl = document.createElement('div');
+                indicatorEl.className = `distance-indicator distance-${choice.distanceToTarget}`;
+                indicatorEl.textContent = choice.distanceToTarget;
+                choiceEl.appendChild(indicatorEl);
+                
+                // Add data attribute for easy reference
+                choiceEl.setAttribute('data-distance', choice.distanceToTarget);
+            } else {
+                const indicatorEl = document.createElement('div');
+                indicatorEl.className = 'distance-indicator distance-unknown';
+                indicatorEl.textContent = '?';
+                choiceEl.appendChild(indicatorEl);
+                
+                // Add data attribute
+                choiceEl.setAttribute('data-distance', 'unknown');
+            }
             
             elements.wordChoices.appendChild(choiceEl);
         });
@@ -312,30 +339,49 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add to path
         gameState.pathTaken.push(chosenWord);
         
-        // Add to history with distance if available
+        // Add to history with distance indicator
         const historyItem = document.createElement('div');
         historyItem.className = 'history-item';
+        historyItem.style.position = 'relative'; // For positioning the indicator
         
         // If we have the distance info from the choice, use it
         const choiceInfo = elements.wordChoices.querySelector(`[data-word="${chosenWord}"]`);
-        const distanceEl = choiceInfo?.querySelector('.choice-distance');
+        const distanceAttr = choiceInfo?.getAttribute('data-distance');
         
-        if (distanceEl) {
-            // Create word element
-            const wordEl = document.createElement('span');
-            wordEl.className = 'history-word';
-            wordEl.textContent = chosenWord;
+        // Create word element
+        const wordEl = document.createElement('span');
+        wordEl.className = 'history-word';
+        wordEl.textContent = chosenWord;
+        historyItem.appendChild(wordEl);
+        
+        // Add distance indicator if available
+        if (distanceAttr) {
+            // Get the distance value from the hidden element
+            const distanceValue = choiceInfo.querySelector('.choice-distance')?.textContent;
             
-            // Create distance element
-            const historyDistance = document.createElement('span');
-            historyDistance.className = distanceEl.className;
-            historyDistance.textContent = distanceEl.textContent;
-            
-            // Add to history item
-            historyItem.appendChild(wordEl);
-            historyItem.appendChild(historyDistance);
+            if (distanceValue && !isNaN(parseInt(distanceValue))) {
+                const distance = parseInt(distanceValue);
+                
+                // Create indicator circle
+                const indicatorEl = document.createElement('div');
+                indicatorEl.className = `distance-indicator distance-${distance}`;
+                indicatorEl.style.width = '18px'; // Slightly smaller for history items
+                indicatorEl.style.height = '18px';
+                indicatorEl.style.fontSize = '10px';
+                indicatorEl.textContent = distance;
+                historyItem.appendChild(indicatorEl);
+            } else if (distanceAttr === 'unknown') {
+                // Unknown distance
+                const indicatorEl = document.createElement('div');
+                indicatorEl.className = 'distance-indicator distance-unknown';
+                indicatorEl.style.width = '18px';
+                indicatorEl.style.height = '18px';
+                indicatorEl.style.fontSize = '10px';
+                indicatorEl.textContent = '?';
+                historyItem.appendChild(indicatorEl);
+            }
         } else {
-            // Simple fallback
+            // No distance info available, just show the word
             historyItem.textContent = chosenWord;
         }
         
