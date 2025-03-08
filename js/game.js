@@ -66,18 +66,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to toggle reasoning panel
     function toggleReasoningPanel() {
         const reasoningElements = document.querySelectorAll('.reasoning-container');
+        console.log('Found reasoning elements:', reasoningElements.length);
         
         // Toggle display of all reasoning containers
         reasoningElements.forEach(el => {
+            console.log('Toggling element:', el);
             el.classList.toggle('hidden');
         });
         
-        // Update button text
-        if (reasoningElements.length > 0 && reasoningElements[0].classList.contains('hidden')) {
-            elements.toggleReasoning.textContent = 'Show LLM Reasoning';
-        } else {
-            elements.toggleReasoning.textContent = 'Hide LLM Reasoning';
-        }
+        // Always toggle text for more feedback
+        const newText = elements.toggleReasoning.textContent.includes('Show') ? 
+            'Hide LLM Reasoning' : 'Show LLM Reasoning';
+        elements.toggleReasoning.textContent = newText;
+        
+        // Force reasoning containers to be visible/hidden based on button text
+        const shouldBeHidden = elements.toggleReasoning.textContent.includes('Show');
+        reasoningElements.forEach(el => {
+            if (shouldBeHidden) {
+                el.classList.add('hidden');
+            } else {
+                el.classList.remove('hidden');
+            }
+        });
     }
     
     // Helper function to check if an element is scrolled to bottom
@@ -472,11 +482,22 @@ document.addEventListener('DOMContentLoaded', () => {
             reasoningContainer.innerHTML = gameState.currentReasoning;
             historyItem.appendChild(reasoningContainer);
             
-            // Add toggle functionality
-            reasoningToggle.addEventListener('click', function() {
-                reasoningContainer.classList.toggle('hidden');
-                reasoningToggle.textContent = reasoningContainer.classList.contains('hidden') ? 
-                    'Show reasoning' : 'Hide reasoning';
+            // Add toggle functionality with more robust handling
+            reasoningToggle.addEventListener('click', function(event) {
+                // Prevent event bubbling to avoid any interference
+                event.stopPropagation(); 
+                
+                console.log('Toggle clicked for:', reasoningContainer);
+                const isHidden = reasoningContainer.classList.contains('hidden');
+                
+                // Explicitly set the visibility instead of toggling
+                if (isHidden) {
+                    reasoningContainer.classList.remove('hidden');
+                    reasoningToggle.textContent = 'Hide reasoning';
+                } else {
+                    reasoningContainer.classList.add('hidden');
+                    reasoningToggle.textContent = 'Show reasoning';
+                }
             });
             
             // Clear the current reasoning for the next choice

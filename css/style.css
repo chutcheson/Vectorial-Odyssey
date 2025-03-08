@@ -146,7 +146,7 @@ body::before {
 }
 
 .hidden {
-    display: none;
+    display: none !important; /* Add !important to ensure it overrides any other display properties */
 }
 
 /* Start Screen */
