@@ -58,7 +58,7 @@ The LLM must determine which word will get it closest to the target word.
 
 2. Open your browser and navigate to:
    ```
-   http://localhost:3001
+   http://localhost:3002
    ```
 
 ## Game Mechanics
