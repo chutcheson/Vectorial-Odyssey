@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Traverse</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Word Traverse</h1>
+        
+        <!-- Starting Screen -->
+        <div id="start-screen" class="screen">
+            <div class="game-description">
+                <p>Navigate from a starting word to a target word by choosing intermediate words that minimize semantic distance.</p>
+            </div>
+            
+            <div class="options">
+                <div class="option-group">
+                    <label for="llm-select">Select LLM:</label>
+                    <select id="llm-select" class="styled-select">
+                        <option value="claude-3-7-sonnet-20250219">Claude-3.7-Sonnet</option>
+                        <option value="gpt-4o">GPT-4o</option>
+                        <option value="gpt-4o-mini">GPT-4o-mini</option>
+                    </select>
+                </div>
+                
+                <div class="option-group">
+                    <label for="rounds-select">Number of Rounds:</label>
+                    <select id="rounds-select" class="styled-select">
+                        <option value="1">1 Round</option>
+                        <option value="5">5 Rounds</option>
+                        <option value="10">10 Rounds</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="start-game" class="btn">Start Game</button>
+        </div>
+        
+        <!-- Gameplay Screen -->
+        <div id="gameplay-screen" class="screen hidden">
+            <div class="game-info">
+                <div class="info-item">
+                    <span class="label">Model:</span>
+                    <span id="current-model" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Round:</span>
+                    <span id="current-round" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Target:</span>
+                    <span id="target-word" class="value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Score:</span>
+                    <span id="current-score" class="value">0</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Time:</span>
+                    <span id="timer" class="value">02:00</span>
+                </div>
+            </div>
+            
+            <div class="word-display">
+                <div id="current-word" class="current-word"></div>
+                
+                <div id="word-choices" class="word-choices">
+                    <!-- Word choices will be populated here -->
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <h3>Path Taken</h3>
+                <div id="word-history" class="word-history">
+                    <!-- Word history will be populated here -->
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button id="next-round" class="btn hidden">Next Round</button>
+                <button id="end-game" class="btn hidden">End Game</button>
+            </div>
+        </div>
+        
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen hidden">
+            <h2>Game Results</h2>
+            
+            <div id="final-score" class="final-score">
+                <!-- Final score will be shown here -->
+            </div>
+            
+            <div id="rounds-summary" class="rounds-summary">
+                <!-- Summary of rounds will be shown here -->
+            </div>
+            
+            <button id="play-again" class="btn">Play Again</button>
+        </div>
+    </div>
+    
+    <script src="js/game.js"></script>
+</body>
+</html>
