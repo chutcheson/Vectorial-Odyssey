@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thinkingItem.remove();
             
             // Format the reasoning for display using our helper function
-            const formattedReasoning = formatReasoning(reasoning, chosenWord, targetWord);
+            const formattedReasoning = formatReasoning(reasoning, chosenWord, gameState.targetWord);
             
             // Store the reasoning to be added with the history item later
             gameState.currentReasoning = formattedReasoning;
