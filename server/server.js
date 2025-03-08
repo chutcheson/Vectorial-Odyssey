@@ -90,16 +90,18 @@ async function getAnthropicChoices(currentWord, targetWord, choices, pathSoFar) 
                 messages: [
                     {
                         role: 'user',
-                        content: `You are playing a word navigation game. You need to navigate from your current word to a target word by choosing semantically related words.
+                        content: `You are playing a word navigation game.
 
 Current word: ${currentWord}
 Target word: ${targetWord}
 Path taken so far: ${pathSoFar.join(' → ')}
 
 You have these choices:
-${choices.map(c => `- ${c.word} (similarity to current word: ${c.similarity.toFixed(4)})`).join('\n')}
+${choices.map(c => `- ${c.word}`).join('\n')}
 
-Choose the word that you think will get you closest to the target word "${targetWord}". Return only the chosen word, nothing else.`
+Navigate from your current word to a target word. At each step, you will be given the two most similar words to the current word and the two least similar words to the current word from a corpus of 1000 common nouns.
+
+Choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
                     }
                 ]
             },
@@ -133,16 +135,18 @@ async function getOpenAIChoices(model, currentWord, targetWord, choices, pathSoF
                     },
                     {
                         role: 'user',
-                        content: `Navigate from your current word to a target word by choosing semantically related words.
+                        content: `You are playing a word navigation game.
 
 Current word: ${currentWord}
 Target word: ${targetWord}
 Path taken so far: ${pathSoFar.join(' → ')}
 
 You have these choices:
-${choices.map(c => `- ${c.word} (similarity to current word: ${c.similarity.toFixed(4)})`).join('\n')}
+${choices.map(c => `- ${c.word}`).join('\n')}
 
-Choose the word that you think will get you closest to the target word "${targetWord}". Return only the chosen word, nothing else.`
+Navigate from your current word to a target word. At each step, you will be given the two most similar words to the current word and the two least similar words to the current word from a corpus of 1000 common nouns.
+
+Choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
                     }
                 ],
                 temperature: 0
