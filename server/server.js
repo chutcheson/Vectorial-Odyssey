@@ -104,12 +104,11 @@ Game rules: Navigate from your current word to the target word by selecting the 
 - Two words that are semantically furthest from your current word
 All words come from a corpus of 1000 common nouns.
 
-First, analyze each word choice in 1-2 sentences, explaining its semantic relationship to both the current word and target word.
-Then, choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.
+Analyze the word choices and select the one that will help you reach the target word "${targetWord}" in the fewest possible steps.
 
 Format your response as follows:
 <analysis>
-Your reasoning about each word choice...
+Your reasoning...
 </analysis>
 
 <choice>word</choice>`
@@ -178,12 +177,11 @@ Game rules: Navigate from your current word to the target word by selecting the 
 - Two words that are semantically furthest from your current word
 All words come from a corpus of 1000 common nouns.
 
-First, analyze each word choice in 1-2 sentences, explaining its semantic relationship to both the current word and target word.
-Then, choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.
+Analyze the word choices and select the one that will help you reach the target word "${targetWord}" in the fewest possible steps.
 
 Format your response as follows:
 <analysis>
-Your reasoning about each word choice...
+Your reasoning...
 </analysis>
 
 <choice>word</choice>`
