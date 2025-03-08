@@ -67,20 +67,21 @@ body::before {
     position: relative;
 }
 
-.title {
-    font-size: 32px;
+.start-title {
+    font-size: 36px;
     font-weight: 800;
-    color: var(--text-color);
+    color: var(--accent-color);
     letter-spacing: -0.5px;
     text-transform: uppercase;
     margin: var(--spacing-lg) 0;
     text-align: center;
     position: relative;
+    font-family: 'Space Mono', monospace;
     /* Slight text shadow for depth */
     text-shadow: 1px 1px 0px rgba(75, 74, 71, 0.1);
 }
 
-.title::after {
+.start-title::after {
     content: "";
     display: block;
     width: 100px;
@@ -248,11 +249,11 @@ label {
 }
 
 .game-title-area {
-    flex: 0 0 30%;
+    flex: 0 0 35%;
     background-color: var(--card-background);
     border: 2px solid var(--text-color);
     box-shadow: 4px 4px 0 var(--text-color);
-    padding: 15px 20px;
+    padding: 20px 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -260,19 +261,21 @@ label {
 }
 
 .game-title {
-    font-size: 20px;
+    font-size: 26px;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-family: 'Space Mono', monospace;
     text-transform: uppercase;
     letter-spacing: 1px;
+    color: var(--accent-color);
 }
 
 .game-subtitle {
-    font-size: 14px;
+    font-size: 16px;
     font-style: italic;
     font-family: 'Space Mono', monospace;
     color: var(--secondary-color);
+    line-height: 1.4;
 }
 
 .game-info {
