@@ -16,9 +16,9 @@ You have these choices:
 - hill
 
 Game rules: Navigate from your current word to the target word by selecting the best word at each step. For each choice, you are always given exactly four words:
-- Two words that are semantically closest to your current word
-- Two words that are semantically furthest from your current word
-All words come from a corpus of 1000 common nouns.
+- Two words that are semantically closest to your current word (based on vector embedding similarity)
+- Two words that are semantically furthest from your current word (based on vector embedding distance)
+All words come from a corpus of 1000 common nouns. Semantic relationships are determined by vector embeddings, where words with similar meanings have vectors that point in similar directions.
 
 Analyze the word choices and select the one that will help you reach the target word "mountain" in the fewest possible steps.
 
