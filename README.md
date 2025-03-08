@@ -1,12 +1,14 @@
-# Word Traverse
+# Vectorial Odyssey
 
-Word Traverse is a game that challenges Language Learning Models (LLMs) to navigate from a starting word to a target word by choosing intermediate words ("hops") that minimize semantic distance to the target.
+![Vectorial Odyssey Game](images/vectorial_odyssey.png)
+
+Vectorial Odyssey is a game that challenges Language Learning Models (LLMs) to navigate from a starting word to a target word by choosing intermediate words ("hops") that minimize semantic distance to the target.
 
 ## Game Concept
 
 The game tests an LLM's ability to navigate semantic space by choosing the best next word from a set of options. At each step, the LLM is provided with four word choices:
-- 2 words most similar to the current word
-- 2 words least similar to the current word
+- 2 words most similar to the current word (based on vector embedding similarity)
+- 2 words least similar to the current word (based on vector embedding distance)
 
 The LLM must determine which word will get it closest to the target word.
 
@@ -30,8 +32,8 @@ The LLM must determine which word will get it closest to the target word.
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/word-traverse.git
-   cd word-traverse
+   git clone https://github.com/chutcheson/Vectorial-Odyssey.git
+   cd Vectorial-Odyssey
    ```
 
 2. Install Node.js dependencies:
