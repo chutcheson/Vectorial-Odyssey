@@ -131,6 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Game functions
     async function startGame() {
+        // Remove any existing result messages from previous games
+        const resultMessages = document.querySelectorAll('.result-message');
+        resultMessages.forEach(msg => msg.remove());
+        
         gameState.currentModel = elements.llmSelect.value;
         gameState.totalRounds = parseInt(elements.roundsSelect.value);
         gameState.currentRound = 1;
@@ -647,10 +651,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function resetGame() {
+        // Remove any result messages before resetting UI
+        const resultMessages = document.querySelectorAll('.result-message');
+        resultMessages.forEach(msg => msg.remove());
+        
         updateUI('reset');
     }
     
     function updateUI(action) {
+        // Always remove any result messages when changing screens
+        const resultMessages = document.querySelectorAll('.result-message');
+        resultMessages.forEach(msg => msg.remove());
+        
         switch (action) {
             case 'start-game':
                 elements.startScreen.classList.add('hidden');
