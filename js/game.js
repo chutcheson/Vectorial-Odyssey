@@ -337,16 +337,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.error);
             }
             
-            const { chosenWord } = data;
+            const { chosenWord, reasoning } = data;
             
             // Remove thinking indicator
             thinkingItem.remove();
             
-            // Generate mock reasoning (in a real implementation, this would come from the LLM)
-            const reasoning = generateMockReasoning(choices, chosenWord, gameState.targetWord);
+            // Format the reasoning for display using our helper function
+            const formattedReasoning = formatReasoning(reasoning, chosenWord, targetWord);
             
             // Store the reasoning to be added with the history item later
-            gameState.currentReasoning = reasoning;
+            gameState.currentReasoning = formattedReasoning;
             
             // Highlight the chosen word
             highlightChoice(chosenWord);
@@ -365,34 +365,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Function to generate mock reasoning for demo purposes
-    function generateMockReasoning(choices, chosenWord, targetWord) {
-        // Find the chosen word in choices array
-        const chosenChoice = choices.find(c => c.word === chosenWord);
+    // Function to format the reasoning text (in case we need to add any formatting)
+    function formatReasoning(reasoning, chosenWord, targetWord) {
+        if (!reasoning) {
+            return '<p>No reasoning provided by the model.</p>';
+        }
         
-        // For demo purposes, we'll create a mock reasoning
-        let reasoning = `<p>Analyzing options to reach "${targetWord}":</p>
-        <ul>`;
+        // Format the reasoning with proper HTML
+        const formatted = reasoning
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Convert markdown-style **bold** to <strong>
         
-        // Add analysis for each choice
-        choices.forEach(choice => {
-            // In a real implementation, this would be based on the LLM's actual reasoning
-            const semantic = Math.random() > 0.5 ? 'strong' : 'weak';
-            const isChosen = choice.word === chosenWord;
-            
-            reasoning += `<li>${choice.word} - ${semantic} semantic connection`;
-            
-            if (isChosen) {
-                reasoning += ` <strong>(Selected)</strong>`;
-            }
-            
-            reasoning += `</li>`;
-        });
-        
-        reasoning += `</ul>
-        <p>I chose <strong>${chosenWord}</strong> because it appears to have the strongest semantic connection to "${targetWord}".</p>`;
-        
-        return reasoning;
+        return `<p>${formatted}</p>`;
     }
     
     function highlightChoice(word) {

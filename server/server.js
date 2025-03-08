@@ -104,7 +104,15 @@ Game rules: Navigate from your current word to the target word by selecting the 
 - Two words that are semantically furthest from your current word
 All words come from a corpus of 1000 common nouns.
 
-Your goal is to choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
+First, analyze each word choice in 1-2 sentences, explaining its semantic relationship to both the current word and target word.
+Then, choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.
+
+Format your response as follows:
+<analysis>
+Your reasoning about each word choice...
+</analysis>
+
+<choice>word</choice>`
                     }
                 ]
             },
@@ -117,11 +125,29 @@ Your goal is to choose the word that will help you reach the target word "${targ
             }
         );
         
-        const chosenWord = response.data.content[0].text.trim();
-        return chosenWord;
+        const fullResponse = response.data.content[0].text.trim();
+        
+        // Extract choice and analysis
+        let analysis = "";
+        let chosenWord = "";
+        
+        const analysisMatch = fullResponse.match(/<analysis>([\s\S]*?)<\/analysis>/);
+        if (analysisMatch && analysisMatch[1]) {
+            analysis = analysisMatch[1].trim();
+        }
+        
+        const choiceMatch = fullResponse.match(/<choice>(.*?)<\/choice>/);
+        if (choiceMatch && choiceMatch[1]) {
+            chosenWord = choiceMatch[1].trim();
+        } else {
+            // Fallback: just get the last word if no tags found
+            chosenWord = fullResponse.split('\n').pop().trim();
+        }
+        
+        return { chosenWord, reasoning: analysis };
     } catch (error) {
         console.error('Error with Anthropic API:', error.response?.data || error.message);
-        return choices[0].word; // Fallback to first choice if API fails
+        return { chosenWord: choices[0].word, reasoning: "Error getting reasoning" }; // Fallback
     }
 }
 
@@ -134,7 +160,7 @@ async function getOpenAIChoices(model, currentWord, targetWord, choices, pathSoF
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are playing a word navigation game. Return only the chosen word, no explanation.'
+                        content: 'You are playing a word navigation game that requires semantic reasoning.'
                     },
                     {
                         role: 'user',
@@ -152,7 +178,15 @@ Game rules: Navigate from your current word to the target word by selecting the 
 - Two words that are semantically furthest from your current word
 All words come from a corpus of 1000 common nouns.
 
-Your goal is to choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.`
+First, analyze each word choice in 1-2 sentences, explaining its semantic relationship to both the current word and target word.
+Then, choose the word that will help you reach the target word "${targetWord}" in the fewest possible steps.
+
+Format your response as follows:
+<analysis>
+Your reasoning about each word choice...
+</analysis>
+
+<choice>word</choice>`
                     }
                 ],
                 temperature: 0
@@ -165,11 +199,29 @@ Your goal is to choose the word that will help you reach the target word "${targ
             }
         );
         
-        const chosenWord = response.data.choices[0].message.content.trim();
-        return chosenWord;
+        const fullResponse = response.data.choices[0].message.content.trim();
+        
+        // Extract choice and analysis
+        let analysis = "";
+        let chosenWord = "";
+        
+        const analysisMatch = fullResponse.match(/<analysis>([\s\S]*?)<\/analysis>/);
+        if (analysisMatch && analysisMatch[1]) {
+            analysis = analysisMatch[1].trim();
+        }
+        
+        const choiceMatch = fullResponse.match(/<choice>(.*?)<\/choice>/);
+        if (choiceMatch && choiceMatch[1]) {
+            chosenWord = choiceMatch[1].trim();
+        } else {
+            // Fallback: just get the last word if no tags found
+            chosenWord = fullResponse.split('\n').pop().trim();
+        }
+        
+        return { chosenWord, reasoning: analysis };
     } catch (error) {
         console.error('Error with OpenAI API:', error.response?.data || error.message);
-        return choices[0].word; // Fallback to first choice if API fails
+        return { chosenWord: choices[0].word, reasoning: "Error getting reasoning" }; // Fallback
     }
 }
 
@@ -216,15 +268,17 @@ app.post('/api/llm/choose', async (req, res) => {
     }
     
     try {
-        let chosenWord;
+        let result;
         
         if (model === 'claude-3-7-sonnet-20250219') {
-            chosenWord = await getAnthropicChoices(currentWord, targetWord, choices, pathSoFar);
+            result = await getAnthropicChoices(currentWord, targetWord, choices, pathSoFar);
         } else if (model === 'gpt-4o' || model === 'gpt-4o-mini') {
-            chosenWord = await getOpenAIChoices(model, currentWord, targetWord, choices, pathSoFar);
+            result = await getOpenAIChoices(model, currentWord, targetWord, choices, pathSoFar);
         } else {
             return res.status(400).json({ error: 'Invalid model specified' });
         }
+        
+        let { chosenWord, reasoning } = result;
         
         // Verify the chosen word is in the list of choices
         const validWord = choices.find(c => c.word.toLowerCase() === chosenWord.toLowerCase());
@@ -232,9 +286,10 @@ app.post('/api/llm/choose', async (req, res) => {
         if (!validWord) {
             // If LLM returns invalid word, just use the first choice as fallback
             chosenWord = choices[0].word;
+            reasoning += "\n\n(Note: The model initially selected an invalid word, so the first choice was used instead.)";
         }
         
-        res.json({ chosenWord });
+        res.json({ chosenWord, reasoning });
     } catch (error) {
         console.error('Error in LLM choice:', error);
         res.status(500).json({ error: 'Error processing LLM choice' });
