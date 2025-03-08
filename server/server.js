@@ -35,7 +35,7 @@ function getRandomWord() {
     return words[Math.floor(Math.random() * words.length)];
 }
 
-function getWordChoices(currentWord) {
+function getWordChoices(currentWord, targetWord) {
     if (!wordSimilarities[currentWord]) {
         return { error: `Word '${currentWord}' not found in database` };
     }
@@ -43,18 +43,30 @@ function getWordChoices(currentWord) {
     const allSimilarities = wordSimilarities[currentWord];
     
     // Get 2 most similar words
-    const mostSimilar = allSimilarities.slice(0, 2).map(item => ({
-        word: item.word,
-        similarity: item.similarity,
-        type: 'similar'
-    }));
+    const mostSimilar = allSimilarities.slice(0, 2).map(item => {
+        // Find distance from this word to target
+        const distanceToTarget = wordSimilarities[item.word]?.find(w => w.word === targetWord)?.hop_distance || -1;
+        
+        return {
+            word: item.word,
+            similarity: item.similarity,
+            type: 'similar',
+            distanceToTarget: distanceToTarget
+        };
+    });
     
     // Get 2 least similar words
-    const leastSimilar = allSimilarities.slice(-2).map(item => ({
-        word: item.word,
-        similarity: item.similarity,
-        type: 'dissimilar'
-    }));
+    const leastSimilar = allSimilarities.slice(-2).map(item => {
+        // Find distance from this word to target
+        const distanceToTarget = wordSimilarities[item.word]?.find(w => w.word === targetWord)?.hop_distance || -1;
+        
+        return {
+            word: item.word,
+            similarity: item.similarity,
+            type: 'dissimilar',
+            distanceToTarget: distanceToTarget
+        };
+    });
     
     // Combine and shuffle
     const choices = [...mostSimilar, ...leastSimilar];
@@ -165,13 +177,25 @@ app.get('/api/words/random', (req, res) => {
 
 app.get('/api/words/:word/choices', (req, res) => {
     const word = req.params.word.toLowerCase();
-    const choices = getWordChoices(word);
+    const targetWord = req.query.target?.toLowerCase();
+    
+    if (!targetWord) {
+        return res.status(400).json({ error: "Missing 'target' query parameter" });
+    }
+    
+    const choices = getWordChoices(word, targetWord);
     
     if (choices.error) {
         return res.status(404).json(choices);
     }
     
-    res.json(choices);
+    // Also add the current word's distance to target
+    const currentWordDistanceToTarget = wordSimilarities[word]?.find(w => w.word === targetWord)?.hop_distance || -1;
+    
+    res.json({
+        choices,
+        currentWordDistanceToTarget
+    });
 });
 
 app.post('/api/llm/choose', async (req, res) => {

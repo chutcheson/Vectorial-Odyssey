@@ -208,10 +208,28 @@ label {
     border: 3px solid var(--color-secondary);
     border-radius: var(--border-radius-md);
     min-width: 250px;
+    min-height: 120px;
     text-align: center;
     background-color: white;
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.current-word-text {
+    font-size: 3rem;
+    font-weight: bold;
     text-transform: uppercase;
+}
+
+.current-word-distance {
+    font-size: 1rem;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 12px;
+    margin-top: var(--spacing-xs);
 }
 
 .word-choices {
@@ -235,12 +253,61 @@ label {
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
 }
 
 .word-choice:hover {
     background-color: var(--color-light);
     transform: translateY(-3px);
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.choice-word {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.choice-distance {
+    font-size: 0.8rem;
+    font-weight: normal;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 10px;
+    background-color: var(--color-light);
+}
+
+/* Distance indicators */
+.distance-close {
+    background-color: #dcf5dc;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+}
+
+.distance-medium {
+    background-color: #ffecb3;
+    color: #ff8f00;
+    border: 1px solid #ff8f00;
+}
+
+.distance-far {
+    background-color: #ffcdd2;
+    color: #c62828;
+    border: 1px solid #c62828;
+}
+
+.distance-unknown {
+    background-color: #e0e0e0;
+    color: #616161;
+    border: 1px solid #616161;
+}
+
+.distance-target {
+    background-color: #e8f5e9;
+    color: #00c853;
+    border: 1px solid #00c853;
+    font-weight: bold;
 }
 
 .word-choice::before {
@@ -289,7 +356,8 @@ label {
     background-color: var(--color-light);
     border-radius: var(--border-radius-sm);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: var(--spacing-xs);
     position: relative;
 }
 
@@ -306,6 +374,17 @@ label {
 
 .history-item:last-child::after {
     display: none;
+}
+
+.history-word {
+    font-weight: bold;
+}
+
+.history-item .choice-distance {
+    font-size: 0.7rem;
+    padding: 2px 5px;
+    display: inline-block;
+    margin-top: 2px;
 }
 
 .controls {
