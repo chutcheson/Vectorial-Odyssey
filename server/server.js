@@ -224,9 +224,8 @@ app.post('/api/llm/choose', async (req, res) => {
         const validWord = choices.find(c => c.word.toLowerCase() === chosenWord.toLowerCase());
         
         if (!validWord) {
-            // If LLM returns invalid word, use the most similar word from choices
-            const sortedChoices = [...choices].sort((a, b) => b.similarity - a.similarity);
-            chosenWord = sortedChoices[0].word;
+            // If LLM returns invalid word, just use the first choice as fallback
+            chosenWord = choices[0].word;
         }
         
         res.json({ chosenWord });

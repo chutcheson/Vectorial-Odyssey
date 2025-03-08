@@ -314,7 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     model: gameState.currentModel,
                     currentWord: gameState.currentWord,
                     targetWord: gameState.targetWord,
-                    choices: choices,
+                    choices: choices.map(c => ({
+                        word: c.word,
+                        distanceToTarget: c.distanceToTarget
+                    })),
                     pathSoFar: gameState.pathTaken
                 })
             });
