@@ -80,6 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Helper function to check if an element is scrolled to bottom
+    function isScrolledToBottom(el) {
+        // Allow for a small tolerance of 30px
+        const tolerance = 30;
+        return el.scrollHeight - el.scrollTop - el.clientHeight <= tolerance;
+    }
+    
     // Timer functions
     function startTimer() {
         let timeLeft = 120; // 2 minutes in seconds
@@ -311,8 +318,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const thinkingItem = document.createElement('div');
             thinkingItem.className = 'history-item thinking';
             thinkingItem.textContent = 'Thinking...';
+            
+            // Check if user was already scrolled to bottom before adding indicator
+            const wasAtBottom = isScrolledToBottom(elements.wordHistory);
+            
+            // Add the thinking indicator
             elements.wordHistory.appendChild(thinkingItem);
-            elements.wordHistory.scrollTop = elements.wordHistory.scrollHeight;
+            
+            // Only auto-scroll if user was already at the bottom
+            if (wasAtBottom) {
+                elements.wordHistory.scrollTop = elements.wordHistory.scrollHeight;
+            }
             
             const response = await fetch(`${API.BASE_URL}${API.LLM_CHOOSE}`, {
                 method: 'POST',
@@ -467,8 +483,16 @@ document.addEventListener('DOMContentLoaded', () => {
             gameState.currentReasoning = null;
         }
         
+        // Check if user was already scrolled to bottom before adding new item
+        const wasAtBottom = isScrolledToBottom(elements.wordHistory);
+        
+        // Add the item
         elements.wordHistory.appendChild(historyItem);
-        elements.wordHistory.scrollTop = elements.wordHistory.scrollHeight;
+        
+        // Only auto-scroll if user was already at the bottom
+        if (wasAtBottom) {
+            elements.wordHistory.scrollTop = elements.wordHistory.scrollHeight;
+        }
         
         // Check if target reached
         if (chosenWord.toLowerCase() === gameState.targetWord.toLowerCase()) {
