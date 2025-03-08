@@ -10,6 +10,8 @@ The game tests an LLM's ability to navigate semantic space by choosing the best 
 - 2 words most similar to the current word (based on vector embedding similarity)
 - 2 words least similar to the current word (based on vector embedding distance)
 
+Word similarity is calculated using the nomic-ai/nomic-embed-text-v1.5 embedding model, which creates high-quality vector representations of each word's meaning.
+
 The LLM must determine which word will get it closest to the target word.
 
 ## Features
