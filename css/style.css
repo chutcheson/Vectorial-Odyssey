@@ -152,16 +152,29 @@ body::before {
 
 /* Start Screen */
 .game-description {
-    max-width: 600px;
+    max-width: 700px;
     text-align: center;
     font-size: 16px;
     margin-bottom: var(--spacing-lg);
     font-family: 'Space Mono', monospace;
-    padding: 12px 15px;
+    padding: 20px 25px;
     background-color: transparent;
     border: 1px solid var(--text-color);
     position: relative;
-    line-height: 1.5;
+    line-height: 1.6;
+}
+
+.game-description h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.game-description p {
+    margin-bottom: 12px;
 }
 
 /* Wabi-Sabi torn edge effect */
@@ -227,15 +240,49 @@ label {
 }
 
 /* Gameplay Screen */
+.game-header {
+    display: flex;
+    width: 100%;
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.game-title-area {
+    flex: 0 0 30%;
+    background-color: var(--card-background);
+    border: 2px solid var(--text-color);
+    box-shadow: 4px 4px 0 var(--text-color);
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.game-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.game-subtitle {
+    font-size: 14px;
+    font-style: italic;
+    font-family: 'Space Mono', monospace;
+    color: var(--secondary-color);
+}
+
 .game-info {
+    flex: 1;
     display: flex;
     justify-content: space-between;
     background-color: var(--card-background);
     border: 2px solid var(--text-color);
     box-shadow: 4px 4px 0 var(--text-color);
     padding: 15px 20px;
-    margin-bottom: var(--spacing-lg);
-    width: 100%;
     position: relative;
     /* Brutalist clip path for a clean geometric shape */
     clip-path: polygon(
@@ -650,7 +697,7 @@ label {
         min-height: 700px; /* Set minimum height for gameplay screen */
     }
     
-    .game-info {
+    .game-header {
         grid-column: 1 / -1;
     }
     
@@ -673,6 +720,17 @@ label {
 }
 
 @media (max-width: 767px) {
+    .game-header {
+        flex-direction: column;
+    }
+    
+    .game-title-area {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
     .game-info {
         flex-wrap: wrap;
         justify-content: center;

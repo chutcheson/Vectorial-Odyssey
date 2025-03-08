@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Traverse</title>
+    <title>Vectorial Odyssey</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Word Traverse</h1>
+        <h1 class="title">Vectorial Odyssey</h1>
         
         <!-- Starting Screen -->
         <div id="start-screen" class="screen">
             <div class="game-description">
-                <p>Navigate from a starting word to a target word by choosing intermediate words that minimize semantic distance.</p>
+                <h2>A Semantic Navigation Challenge</h2>
+                <p>In Vectorial Odyssey, you'll watch an AI navigate through semantic space, plotting a course from one word to another.</p>
+                <p>At each step, the AI must choose from four options: two words that are semantically close to the current word, and two that are distant. The hop distance indicators show the semantic proximity to the target.</p>
+                <p>Can the AI find the shortest path through the conceptual landscape?</p>
             </div>
             
             <div class="options">
@@ -43,26 +46,32 @@
         
         <!-- Gameplay Screen -->
         <div id="gameplay-screen" class="screen hidden">
-            <div class="game-info">
-                <div class="info-item">
-                    <span class="label">Model:</span>
-                    <span id="current-model" class="value"></span>
+            <div class="game-header">
+                <div class="game-title-area">
+                    <h2 class="game-title">Vectorial Odyssey</h2>
+                    <p class="game-subtitle">An AI's journey through semantic space</p>
                 </div>
-                <div class="info-item">
-                    <span class="label">Round:</span>
-                    <span id="current-round" class="value"></span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Target:</span>
-                    <span id="target-word" class="value"></span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Score:</span>
-                    <span id="current-score" class="value">0</span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Time:</span>
-                    <span id="timer" class="value">02:00</span>
+                <div class="game-info">
+                    <div class="info-item">
+                        <span class="label">Model:</span>
+                        <span id="current-model" class="value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Round:</span>
+                        <span id="current-round" class="value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Target:</span>
+                        <span id="target-word" class="value"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Score:</span>
+                        <span id="current-score" class="value">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Time:</span>
+                        <span id="timer" class="value">02:00</span>
+                    </div>
                 </div>
             </div>
             
