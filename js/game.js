@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resultMessage.textContent = `Target reached! Score: ${roundScore}`;
             resultMessage.classList.add('success');
         } else {
-            resultMessage.textContent = 'Time's up!';
+            resultMessage.textContent = 'Time\'s up!';
             resultMessage.classList.add('failure');
         }
         
